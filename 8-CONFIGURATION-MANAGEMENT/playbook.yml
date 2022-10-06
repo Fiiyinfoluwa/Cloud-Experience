@@ -1,0 +1,37 @@
+---
+- name: Install Apache Server, set timezone and host index.php file 
+  hosts: all
+  remote_user: vagrant
+  become: true
+
+  tasks:
+  - name: Install Apache Server
+    apt:
+      name: apache2
+      state: present
+
+  - name: Install Php
+    apt: 
+      name: php
+      state: present
+
+  - name: Remove index.html for host
+    file: 
+      name: /var/www/html/index.html
+      state: absent
+
+  - name: Host index.php as main content
+    copy:
+      src: ~/phpfiles/index.php
+      dest: /var/www/html
+
+  - name: Start Apache Service
+    service:
+      name: apache2
+      state: started
+
+  - name: set Timezone to Africa/Lagos
+    timezone: 
+      name: Africa/Lagos
+
+
